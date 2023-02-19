@@ -3,4 +3,5 @@ export interface InitialState {
     title: string;
     text: string;
   }[];
+  editingNoteIndex: number | null;
 }

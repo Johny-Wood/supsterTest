@@ -1,7 +1,7 @@
 import { Input, Button } from "@mantine/core";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { addNote, useAppDispatch } from "../../store";
+import { addNote, editNote, notesSelectors, setEditingNoteIndex, useAppDispatch, useAppSelector } from "../../store";
 
 import { Inputs } from "./NoteInputs.types";
 
@@ -10,11 +10,21 @@ import styles from "./noteInputs.module.scss";
 export const NoteInputs = () => {
   const { register, handleSubmit, reset } = useForm<Inputs>();
 
+  const notesList = useAppSelector(notesSelectors.list);
+  const editingNoteIndex = useAppSelector(notesSelectors.editingNoteIndex);
+
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const { text, title } = data;
-    dispatch(addNote({ text, title }));
+
+    if (editingNoteIndex !== null) {
+      dispatch(editNote({ text, title, index: editingNoteIndex }));
+      dispatch(setEditingNoteIndex({ index: null }));
+    } else {
+      dispatch(addNote({ text, title }));
+    };
+
     reset();
   };
 
@@ -22,15 +32,15 @@ export const NoteInputs = () => {
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <Input
         className={styles.input}
-        placeholder="Title"
+        placeholder={editingNoteIndex !== null ? notesList[editingNoteIndex].title : "Title"}
         {...register("title", { required: true })}
       />
       <Input
         className={styles.input}
-        placeholder="Text"
+        placeholder={editingNoteIndex !== null ? notesList[editingNoteIndex].text : "Text"}
         {...register("text", { required: true })}
       />
-      <Button type="submit">Submit</Button>
+      <Button type="submit">{editingNoteIndex !== null ? "Edit" : "Submit"}</Button>
     </form>
   );
 };
