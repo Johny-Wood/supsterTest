@@ -6,7 +6,7 @@ import { IconEdit, IconX } from "@tabler/icons-react";
 import { Props } from "./Note.types";
 import { deleteNote, notesSelectors, setEditingNoteId, useAppDispatch, useAppSelector } from "../../store";
 
-export const Note: FC<Props> = ({ text, count, title, id }) => {
+export const Note: FC<Props> = ({ text, title, id }) => {
   const editingNoteId = useAppSelector(notesSelectors.editingNoteId);
 
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ export const Note: FC<Props> = ({ text, count, title, id }) => {
             <IconEdit color="blue" />
           </ActionIcon>
           <Badge color="pink" variant="light">
-            {count}
+            {id}
           </Badge>
         </Group>
       </Group>
