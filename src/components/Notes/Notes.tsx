@@ -16,6 +16,7 @@ export const Notes = () => {
             title={item.title}
             text={item.text}
             count={index + 1}
+            id={item.id}
           />
         );
       })}

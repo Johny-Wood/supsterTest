@@ -1,22 +1,26 @@
 import { FC } from "react";
 import { ActionIcon, Badge, Card, Group, Text } from "@mantine/core";
-import { IconEdit } from "@tabler/icons-react";
+import { IconEdit, IconX } from "@tabler/icons-react";
 
 
 import { Props } from "./Note.types";
-import { notesSelectors, setEditingNoteIndex, useAppDispatch, useAppSelector } from "../../store";
+import { deleteNote, notesSelectors, setEditingNoteId, useAppDispatch, useAppSelector } from "../../store";
 
-export const Note: FC<Props> = ({ text, count, title }) => {
-  const editingNoteIndex = useAppSelector(notesSelectors.editingNoteIndex);
+export const Note: FC<Props> = ({ text, count, title, id }) => {
+  const editingNoteId = useAppSelector(notesSelectors.editingNoteId);
 
   const dispatch = useAppDispatch();
 
   const onEdit = () => {
-    if (editingNoteIndex !== null) {
-      dispatch(setEditingNoteIndex({ index: null }));
+    if (editingNoteId !== null) {
+      dispatch(setEditingNoteId({ id: null }));
     } else {
-      dispatch(setEditingNoteIndex({ index: count - 1 }));
+      dispatch(setEditingNoteId({ id: id }));
     };
+  };
+
+  const onDelete = () => {
+    dispatch(deleteNote({ id }));
   };
 
   return (
@@ -24,6 +28,9 @@ export const Note: FC<Props> = ({ text, count, title }) => {
       <Group position="apart" mt="md" mb="xs">
         <Text weight={500}>{title}</Text>
         <Group>
+          <ActionIcon variant="transparent" onClick={onDelete}>
+            <IconX />
+          </ActionIcon>
           <ActionIcon variant="transparent" onClick={onEdit}>
             <IconEdit color="blue" />
           </ActionIcon>

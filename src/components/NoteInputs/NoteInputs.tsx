@@ -1,7 +1,7 @@
 import { Input, Button } from "@mantine/core";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { addNote, editNote, notesSelectors, setEditingNoteIndex, useAppDispatch, useAppSelector } from "../../store";
+import { addNote, editNote, notesSelectors, setEditingNoteId, useAppDispatch, useAppSelector } from "../../store";
 
 import { Inputs } from "./NoteInputs.types";
 
@@ -11,18 +11,18 @@ export const NoteInputs = () => {
   const { register, handleSubmit, reset } = useForm<Inputs>();
 
   const notesList = useAppSelector(notesSelectors.list);
-  const editingNoteIndex = useAppSelector(notesSelectors.editingNoteIndex);
+  const editingNoteId = useAppSelector(notesSelectors.editingNoteId);
 
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const { text, title } = data;
 
-    if (editingNoteIndex !== null) {
-      dispatch(editNote({ text, title, index: editingNoteIndex }));
-      dispatch(setEditingNoteIndex({ index: null }));
+    if (editingNoteId !== null) {
+      dispatch(editNote({ text, title, id: editingNoteId }));
+      dispatch(setEditingNoteId({ id: null }));
     } else {
-      dispatch(addNote({ text, title }));
+      dispatch(addNote({ text, title, id: notesList.length + 1 }));
     };
 
     reset();
@@ -32,15 +32,15 @@ export const NoteInputs = () => {
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <Input
         className={styles.input}
-        placeholder={editingNoteIndex !== null ? notesList[editingNoteIndex].title : "Title"}
+        placeholder="Title"
         {...register("title", { required: true })}
       />
       <Input
         className={styles.input}
-        placeholder={editingNoteIndex !== null ? notesList[editingNoteIndex].text : "Text"}
+        placeholder="Text"
         {...register("text", { required: true })}
       />
-      <Button type="submit">{editingNoteIndex !== null ? "Edit" : "Submit"}</Button>
+      <Button type="submit">{editingNoteId !== null ? "Edit" : "Submit"}</Button>
     </form>
   );
 };

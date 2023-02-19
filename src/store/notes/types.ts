@@ -2,6 +2,7 @@ export interface InitialState {
   list: {
     title: string;
     text: string;
+    id: number;
   }[];
-  editingNoteIndex: number | null;
+  editingNoteId: number | null;
 }
