@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addNote, deleteNote, editNote, setEditingNoteId } from "./actions";
+import { addNote, deleteNote, editNote, setEditingNoteId, setPriority } from "./actions";
 import { InitialState } from "./types";
 
 export const initialState: InitialState = {
@@ -18,7 +18,7 @@ export const slice = createSlice({
     builder.addCase(editNote, (state, { payload }) => {
       const index = state.list.findIndex((el) => el.id === payload.id);
 
-      state.list[index] = { title: payload.title, text: payload.text, id: payload.id };
+      state.list[index] = { title: payload.title, text: payload.text, id: payload.id, priority: payload.priority };
     });
     builder.addCase(setEditingNoteId, (state, { payload }) => {
       state.editingNoteId = payload.id;
@@ -27,6 +27,11 @@ export const slice = createSlice({
       const newList = state.list.filter((el) => el.id !== payload.id);
 
       state.list = newList;
+    });
+    builder.addCase(setPriority, (state, { payload }) => {
+      const index = state.list.findIndex((el) => el.id === payload.id);
+
+      state.list[index].priority = payload.priority;
     });
   },
 });

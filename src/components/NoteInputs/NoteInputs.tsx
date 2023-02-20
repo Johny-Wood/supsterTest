@@ -19,10 +19,10 @@ export const NoteInputs = () => {
     const { text, title } = data;
 
     if (editingNoteId !== null) {
-      dispatch(editNote({ text, title, id: editingNoteId }));
+      dispatch(editNote({ text, title, id: editingNoteId, priority: 1 }));
       dispatch(setEditingNoteId({ id: null }));
     } else {
-      dispatch(addNote({ text, title, id: notesList.length + 1 }));
+      dispatch(addNote({ text, title, id: notesList.length + 1, priority: 0 }));
     };
 
     reset();
